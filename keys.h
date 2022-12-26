@@ -1,9 +1,10 @@
 #ifndef KEYS_H_INCLUDED
 #define KEYS_H_INCLUDED
-#include<iostream>
+#include <iostream>
+#include <string.h>
 using namespace std;
-long long itc_reverse_num(long long a1);
-long long itc_bin_num(long long a1);
-int itc_len_num(long long a1);
-double itc_pow(int a1, int a2);
+string extra_code_gen(string s1, string form_odin, int size);
+string process_binary_number(string binary, int size, int length, int number);
+string to_binary_string(int n);
+string generate_colored(string base, int color_id);
 #endif // KEYS_H_INCLUDED

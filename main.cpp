@@ -1,35 +1,48 @@
-#include <iostream>
 #include "keys.h"
-using namespace std;
 
 int main()
 {
-    int a1,a2,a3,a4,a5;
-    long long d;
-    a4=10;
-    cin>>a1>>a2;
-    if(a1>=0){
-        a5=a1;
-    } else {
-    a5=-1*a1;
-    }
-    d=itc_bin_num(a5);
-    if(a1>=0){
-    while(itc_len_num(d)>(a2+1)){
-        a2--;
-        a3=itc_pow(a4,a2);
-        d=d%(a3*10);
-    }
-    cout<<d;
-    } else {
-    while(itc_len_num(d)>a2){
-        a2--;
-        a3=itc_pow(a4,a2);
-        d=d%a3;
-    }
-    cout<<1;
-    cout<<d;
-    }
-    return 0;
-}
+    int number, size;
+    string binary = "";
+    int number_processing_mode = 0;
+    cout << generate_colored("Input number: ", 1);
+    cin >> number;
+    cout << generate_colored("Saved size: ", 1);
+    cin >> size;
+    if (number < 0) binary = to_binary_string(-number);
+    else binary = to_binary_string(number);
+    string binary_code_format = "";
+    string extra_code_format = "";
+    int length = binary.size();
 
+    cout << "**** RESULT ****\n";
+    cout << generate_colored("Binary form: ", 2) << binary << endl;
+    binary_code_format = process_binary_number(binary, size, length, number);
+    cout << generate_colored("Direct code: ", 2) << binary_code_format << endl;
+
+    if (number < 0)
+    {
+        if (size - length < 0)
+            number_processing_mode = 0;
+        else
+        {
+            number_processing_mode = 1;
+            extra_code_format += "1";
+        }
+
+        for (int i = number_processing_mode; i < size; ++i)
+        {
+            if (binary_code_format[i] == '0')
+                extra_code_format += '1';
+            else
+                extra_code_format += '0';
+        }
+        cout << generate_colored("Reverse code: ", 2) << extra_code_format << endl;
+        string odin = process_binary_number( "1", size, 1, 1);
+		string extra_code_final = extra_code_gen(extra_code_format, odin, size);
+		int length2 = extra_code_final.size();
+	    if (size - length2 < 0) extra_code_final = extra_code_final.erase(0, length2 - size);
+		cout << generate_colored("Extra code: ", 2) << extra_code_final << endl;
+
+    }
+}

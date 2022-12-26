@@ -1,55 +1,67 @@
-long long itc_reverse_num(long long a1){
-    long long a2;
-    a2=0;
-    if (a1<0)
-        a1*=-1;
-    while (a1>0){
-        a2=a2*10+a1%10;
-        a1/=10;
-    }
-    return a2;
+#include "keys.h"
+string extra_code_gen(string s1, string base_bin, int size)
+{
+	string result = "";
+	int payload = 0;
+	char sum;
+	for (int i = (size - 1); i >= 0; --i)
+	{
+		int bitLeft = s1[i] - '0';
+		int bitRight = base_bin[i] - '0';
+		sum = (bitLeft ^ bitRight ^ payload) + '0';
+		result = sum + result;
+		payload = (bitLeft & payload) | (bitRight & payload) | (bitLeft & bitRight);
+	}
+	if (payload) result = "1" + result;
+	return result;
 }
-long long itc_bin_num(long long a1){
-    long long a2;
-    a2=1;
-    while(a1)
+string process_binary_number(string binary, int size, int length, int number)
+{
+    string temp_res = "";
+    if (size - length > 0)
     {
-        a2*=10;
-        a2+=(a1%2);
-        a1/=2;
+        if (number >= 0)
+            temp_res = string((size - length), '0') + binary;
+        else
+            temp_res = '1' + string((size - length - 1), '0') + binary;
     }
-    return itc_reverse_num(a2)/10;
-}
-int itc_len_num(long long a1){
-if (a1<0){a1=-1*a1;}
-    int a2;
-    a2=0;
-    if (a1==0){
-        return 1;
-    } else {
-        if (a1<0){
-            a1=a1*(-1);
-        }else{
-                a1=a1;
-        }
-        while(a1>0){
-            a1=a1/10;
-            a2=a2+1;
-        }
+    else if (size - length < 0)
+    {
+        cout << generate_colored("Warning! Overflow, some bits deleted", 0) << endl;
+        temp_res = binary.erase(0, length - size);
     }
-    return a2;
+    else if (size - length == 0)
+    {
+        cout << generate_colored("Warning! Overflow, some bits deleted", 0) << endl;
+        temp_res = binary;
+    }
+    return temp_res;
 }
-double itc_pow(int a1, int a2) {
-    double a3;
-    a3=1;
-    long long a4;
-    if (a2<0)
-        a4=-1*a2;
-    else
-        a4=a2;
-    for (long long i=0;i<a4;++i)
-        a3*=a1;
-    if (a2<0)
-        a3=1/a3;
-    return a3;
+
+string to_binary_string(int n)
+{
+    string result = "";
+    while (n > 0)
+    {
+        result += '0' + n % 2;
+        n /= 2;
+    }
+    return string(result.crbegin(), result.crend());
+}
+string generate_colored(string base, int color_id){
+    bool FAILSAFE = true;
+    if (FAILSAFE) return base;
+    string res = "";
+    switch (color_id){
+        case 0: // red color
+            res = "\x1B[31m" + base + "\033[0m\t\t";
+            break;
+        case 1: // cyan color
+            res = "\x1B[36m" + base + "\033[0m\t\t";
+            break;
+        case 2: // green color
+            res = "\x1B[32m" + base + "\033[0m\t\t";
+            break;
+    }
+    return res;
 }
